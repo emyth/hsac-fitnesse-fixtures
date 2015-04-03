@@ -105,6 +105,25 @@ public class SeleniumDriverSetup extends SlimFixture {
     }
 
     private String getExecutable(String basename) {
+        String name = getExecutableForOs(basename);
+        return getAbsoluteWebDriverPath(name);
+    }
+
+    protected String getAbsoluteWebDriverPath(String executable) {
+        String path = executable;
+        File f = new File("webdrivers", executable);
+        if (f.exists()) {
+            path = f.getAbsolutePath();
+        } else {
+            f = new File("wiki/webdrivers", executable);
+            if (f.exists()) {
+                path = f.getAbsolutePath();
+            }
+        }
+        return path;
+    }
+
+    protected String getExecutableForOs(String basename) {
         String name = basename;
         String os = System.getProperty("os.name").toLowerCase();
         if (os.contains("win")) {
@@ -113,15 +132,6 @@ public class SeleniumDriverSetup extends SlimFixture {
             name = "osx" + File.separator + basename;
         } else if (os.contains("linux")) {
             name = "linux" + File.separator + basename;
-        }
-        File f = new File("webdrivers", name);
-        if (f.exists()) {
-            name = f.getAbsolutePath();
-        } else {
-            f = new File("wiki/webdrivers", name);
-            if (f.exists()) {
-                name = f.getAbsolutePath();
-            }
         }
         return name;
     }
