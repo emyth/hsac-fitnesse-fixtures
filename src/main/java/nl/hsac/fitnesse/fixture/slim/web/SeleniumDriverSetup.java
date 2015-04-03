@@ -111,6 +111,8 @@ public class SeleniumDriverSetup extends SlimFixture {
             name += ".exe";
         } else if (os.contains("mac")) {
             name = "osx" + File.separator + basename;
+        } else if (os.contains("linux")) {
+            name = "linux" + File.separator + basename;
         }
         File f = new File("webdrivers", name);
         if (f.exists()) {
