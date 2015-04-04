@@ -7,9 +7,9 @@ import org.apache.commons.lang3.StringUtils;
  * Base class for Selenium driver factory factories.
  */
 public abstract class SeleniumDriverFactoryFactoryBase implements SeleniumDriverFactoryFactory {
-    public final static String seleniumOverrideUrlVariableName = "seleniumGridUrl";
-    public final static String seleniumOverrideBrowserVariableName = "seleniumBrowser";
-    public final static String seleniumOverrideCapabilitiesVariableName = "seleniumCapabilities";
+    public final static String SELENIUM_GRID_URL = "seleniumGridUrl";
+    public final static String SELENIUM_BROWSER = "seleniumBrowser";
+    public final static String SELENIUM_CAPABILITIES = "seleniumCapabilities";
 
     @Override
     public abstract boolean willOverride();
@@ -18,7 +18,15 @@ public abstract class SeleniumDriverFactoryFactoryBase implements SeleniumDriver
     public abstract SeleniumHelper.DriverFactory getDriverFactory();
 
     protected boolean isPropertySet(String propertyName) {
-        String capabilitiesString = System.getProperty(propertyName);
-        return !StringUtils.isEmpty(capabilitiesString);
+        String value = getProperty(propertyName);
+        return !StringUtils.isEmpty(value);
+    }
+
+    protected String getProperty(String propertyName) {
+        String value = System.getProperty(propertyName);
+        if (value != null && value.startsWith("\"") && value.endsWith("\"")) {
+            value = value.substring(1, value.length() - 1);
+        }
+        return value;
     }
 }

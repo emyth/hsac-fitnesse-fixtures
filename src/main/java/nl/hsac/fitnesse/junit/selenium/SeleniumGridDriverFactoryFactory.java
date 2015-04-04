@@ -14,15 +14,14 @@ import java.util.Map;
 public class SeleniumGridDriverFactoryFactory extends SeleniumDriverFactoryFactoryBase {
     @Override
     public boolean willOverride() {
-        return isPropertySet(seleniumOverrideUrlVariableName)
-                && isPropertySet(seleniumOverrideCapabilitiesVariableName);
+        return isPropertySet(SELENIUM_GRID_URL)
+                && isPropertySet(SELENIUM_CAPABILITIES);
     }
 
     @Override
     public SeleniumHelper.DriverFactory getDriverFactory() {
-        final String gridUrl = System.getProperty(seleniumOverrideUrlVariableName);
-        final String capabilitiesString = System.getProperty(seleniumOverrideCapabilitiesVariableName);
-        final Map<String, String> capabilities = parseCapabilities(capabilitiesString);
+        final String gridUrl = getProperty(SELENIUM_GRID_URL);
+        final Map<String, String> capabilities = getCapabilities();
         return new SeleniumHelper.DriverFactory() {
             @Override
             public void createDriver() {
@@ -39,12 +38,10 @@ public class SeleniumGridDriverFactoryFactory extends SeleniumDriverFactoryFacto
         };
     }
 
-    protected Map<String, String> parseCapabilities(String capabilitiesString) {
+    protected Map<String, String> getCapabilities() {
+        String capabilitiesString = getProperty(SELENIUM_CAPABILITIES);
         try {
             Map<String, String> result = new LinkedHashMap<String, String>();
-            if (capabilitiesString.startsWith("\"") && capabilitiesString.endsWith("\"")) {
-                capabilitiesString = capabilitiesString.substring(1, capabilitiesString.length() - 2);
-            }
             String[] capas = capabilitiesString.split(",");
             for (String capa : capas) {
                 String[] kv = capa.split(":");
