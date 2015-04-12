@@ -22,14 +22,6 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 public class BrowserTest extends SlimFixture {
-    private static final String ELEMENT_ON_SCREEN_JS =
-            "var rect = arguments[0].getBoundingClientRect();\n" +
-                    "return (\n" +
-                    "  rect.top >= 0 &&\n" +
-                    "  rect.left >= 0 &&\n" +
-                    "  rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&\n" +
-                    "  rect.right <= (window.innerWidth || document.documentElement.clientWidth));";
-
     private SeleniumHelper seleniumHelper = getEnvironment().getSeleniumHelper();
     private int secondsBeforeTimeout;
     private int waitAfterScroll = 0;
@@ -72,8 +64,9 @@ public class BrowserTest extends SlimFixture {
         WebElement element = getSeleniumHelper().findElement(By.id("errorTryAgain"));
         if (element != null) {
             element.click();
-            Alert alert = getSeleniumHelper().driver().switchTo().alert();
-            alert.accept();
+            // don't use confirmAlert as this may be overridden in subclass and to get rid of the
+            // firefox pop-up we need the basic behavior
+            getSeleniumHelper().getAlert().accept();
         }
         return true;
     }
@@ -92,8 +85,32 @@ public class BrowserTest extends SlimFixture {
         return getSeleniumHelper().navigate();
     }
 
+    public boolean confirmAlert() {
+        boolean result = false;
+        Alert alert = getAlert();
+        if (alert != null) {
+            alert.accept();
+            result = true;
+        }
+        return result;
+    }
+
+    public boolean dismissAlert() {
+        boolean result = false;
+        Alert alert = getAlert();
+        if (alert != null) {
+            alert.dismiss();
+            result = true;
+        }
+        return result;
+    }
+
+    protected Alert getAlert() {
+        return getSeleniumHelper().getAlert();
+    }
+
     public boolean openInNewTab(String url) {
-        String cleanUrl = cleanupValue(url);
+        String cleanUrl = getUrl(url);
         final int tabCount = tabCount();
         getSeleniumHelper().executeJavascript("window.open('%s', '_blank')", cleanUrl);
         // ensure new window is open
@@ -394,10 +411,16 @@ public class BrowserTest extends SlimFixture {
                     waitSeconds(1);
                 }
                 result = clickImpl(place);
+            } catch (TimeoutException e) {
+                String message = getTimeoutMessage(e);
+                throw new SlimFixtureException(false, message, e);
             } catch (WebDriverException e) {
                 String msg = e.getMessage();
-                if (!msg.contains("Other element would receive the click")
-                        ||  i == secondsBeforeTimeout()) {
+                if (!msg.contains("Other element would receive the click")) {
+                    // unexpected exception: throw to wiki
+                    throw e;
+                }
+                if (i == secondsBeforeTimeout()) {
                     retry = false;
                 }
             }
@@ -541,10 +564,6 @@ public class BrowserTest extends SlimFixture {
             }
         });
         return result;
-    }
-
-    public String spaceNormalized(String input) {
-        return input.trim().replaceAll("\\s+", " ");
     }
 
     public String valueOf(String place) {
@@ -842,7 +861,7 @@ public class BrowserTest extends SlimFixture {
      * @param element element to scroll to.
      */
     protected void scrollTo(WebElement element) {
-        getSeleniumHelper().executeJavascript("arguments[0].scrollIntoView(true);", element);
+        getSeleniumHelper().scrollTo(element);
         if (waitAfterScroll > 0) {
             waitMilliseconds(waitAfterScroll);
         }
@@ -853,7 +872,7 @@ public class BrowserTest extends SlimFixture {
      * @param element element to scroll to.
      */
     protected void scrollIfNotOnScreen(WebElement element) {
-        if (element.isDisplayed() && !isElementOnScreen(element)) {
+        if (!element.isDisplayed() || !isElementOnScreen(element)) {
             scrollTo(element);
         }
     }
@@ -878,7 +897,7 @@ public class BrowserTest extends SlimFixture {
      * @return true if element is in browser's viewport.
      */
     protected boolean isElementOnScreen(WebElement element) {
-        return (Boolean)getSeleniumHelper().executeJavascript(ELEMENT_ON_SCREEN_JS, element);
+        return getSeleniumHelper().isElementOnScreen(element);
     }
 
     /**
@@ -996,6 +1015,11 @@ public class BrowserTest extends SlimFixture {
     }
 
     private <T> T handleTimeoutException(TimeoutException e) {
+        String message = getTimeoutMessage(e);
+        throw new TimeoutStopTestException(false, message, e);
+    }
+
+    private String getTimeoutMessage(TimeoutException e) {
         // take a screenshot of what was on screen
         String screenShotFile = null;
         try {
@@ -1012,7 +1036,7 @@ public class BrowserTest extends SlimFixture {
             message = String.format("<div>Timed-out waiting (after %ss). Page content:%s</div>",
                                     secondsBeforeTimeout(), getScreenshotLink(screenShotFile));
         }
-        throw new TimeoutStopTestException(false, message, e);
+        return message;
     }
 
     private WebDriverWait waitDriver() {
