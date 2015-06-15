@@ -17,7 +17,7 @@ public class BsnUtilTest {
     public void testGenerate() {
         for (int i = 0; i < 100; i++) {
             String result = generator.generateBsn();
-            assertEquals("Got: " + result, 10, result.length());
+            assertEquals("Got: " + result, 9, result.length());
             assertTrue("Got: " + result, generator.testBsn(result));
         }
     }
