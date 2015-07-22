@@ -1,0 +1,21 @@
+This represents the "Happy Path" no errors.
+
+!define timestamp {!today -xml}
+
+|storyboard|Browser Test                                                                           |
+|open      |http://localhost:3000/start/complete                                                   |
+|enter     |Roger                                      |as |Sarah                                  |
+|enter     |Wilco                                      |as |Simpson                                |
+|enter     |startcomp${timestamp}@test.com                        |as |Email                                  |
+|enter     |Star Ranger                                |as |Business Name                          |
+|enter     |5412184761                                 |as |What’s your phone number?              |
+|enter     |9am PST                                    |as |When’s the best time to call?          |
+|enter     |Fly71997                                   |as |Choose your Hub Password               |
+|select    |Owner                                      |as |What's your role?                      |
+|select    |United States                              |as |Where are you located?                 |
+|select    |Coaching                                   |as |What industry are you in?              |
+|select    |50+                                        |as |How many people work there?            |
+|select    |10M+                                       |as |What were your total revenues in 2014? |
+|select    |Getting my new business on the right track |as |What kind of help are you looking for? |
+|enter     |No, I'm good                               |as |Anything else we should know?          |                              |
+|click     |Request a Call                                                                         |

@@ -1,0 +1,8 @@
+We test a site that is implemented using !-AngularJS-!. These sites are quite dynamic and we have to make sure page rendering is complete before we execute a next step.
+
+|storyboard|Browser Test                |
+|open      |http://localhost:3000/start |
+|enter     |testmeup@test.com|as |Emai  |
+|enter     |Fly71997|as      |Password  |
+|click     |Create Your Account         |
+ 
