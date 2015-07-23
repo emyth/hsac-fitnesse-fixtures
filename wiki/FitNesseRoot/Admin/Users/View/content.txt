@@ -1,0 +1,9 @@
+|storyboard|browser test|
+|open|http://localhost:3000/login|
+|enter|manderson@emyth.com|as|Email|
+|enter|Fly71997|as|Password|
+|click|Log In|
+|click|User Management|
+|click|hbrunetti@emyth.com|
+|check|response status|200|
+

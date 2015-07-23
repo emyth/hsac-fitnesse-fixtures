@@ -1,0 +1,11 @@
+!contents -R2 -g -p -f -h
+!*> Class path for SignUp Page Testing
+
+!path fixtures
+!path fixtures/*.jar
+!pomFile ../pom.xml@compile
+
+!define TEST_SYSTEM {slim} 
+
+!define slim.flags {-i nl.hsac.fitnesse.slim.interaction.InterceptingInteraction}
+*!
