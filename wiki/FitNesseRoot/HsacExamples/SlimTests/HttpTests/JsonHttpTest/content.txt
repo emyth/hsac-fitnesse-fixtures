@@ -8,6 +8,12 @@ First a simple GET request.
 |check   |json path       |$.key       |value       |
 |check   |json path       |$.one       |two         |
 
+|script              |hub spot test                                                                         |
+|set api key         |6f8c33b5-e84e-4ffe-b371-05242ac4ea1f                                                  |
+|get contact by email|startcomp6@test.com                                                                   |
+|show                |response                                                                              |
+|check               |json path                            |$.properties.firstname.value       |Roger       |
+|check               |json path                            |$.properties.lastname.value        |Wilco       |
 
 Then a POST, showing the multiple notations of !-JsonPath-! expressions supported (notice that adding the '$.' prefix is not required).
 

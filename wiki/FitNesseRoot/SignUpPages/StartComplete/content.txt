@@ -1,12 +1,13 @@
-This represents the "Happy Path" no errors.
+3This represents the "Happy Path" no errors.
 
-!define timestamp {!today -xml}
+!define firstname {stomping}
+!define timestamp {!today (mmddyyhhmmss)}
 
 |storyboard|Browser Test                                                                           |
 |open      |http://localhost:3000/start/complete                                                   |
 |enter     |Roger                                      |as |Sarah                                  |
 |enter     |Wilco                                      |as |Simpson                                |
-|enter     |startcomp${timestamp}@test.com                        |as |Email                                  |
+|enter     |${firstname}${timestamp}@test.com          |as |Email                                  |
 |enter     |Star Ranger                                |as |Business Name                          |
 |enter     |5412184761                                 |as |What’s your phone number?              |
 |enter     |9am PST                                    |as |When’s the best time to call?          |
@@ -17,5 +18,14 @@ This represents the "Happy Path" no errors.
 |select    |50+                                        |as |How many people work there?            |
 |select    |10M+                                       |as |What were your total revenues in 2014? |
 |select    |Getting my new business on the right track |as |What kind of help are you looking for? |
-|enter     |No, I'm good                               |as |Anything else we should know?          |                              |
+|enter     |No, I'm good                               |as |Anything else we should know?          |
 |click     |Request a Call                                                                         |
+
+Now we want to check hubspot data to verify
+
+|script              |hub spot test                                                                         |
+|set api key         |6f8c33b5-e84e-4ffe-b371-05242ac4ea1f                                                  |
+|get contact by email|${firstname}${timestamp}@test.com                                                     |
+|check               |json path                            |$.properties.firstname.value       |Roger       |
+|check               |json path                            |$.properties.lastname.value        |Wilco       |
+|show                |response                                                                              |
