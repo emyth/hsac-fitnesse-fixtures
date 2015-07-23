@@ -2,30 +2,31 @@
 
 !define firstname {stomping}
 !define timestamp {!today (mmddyyhhmmss)}
+!define email { ${firstname}${timestamp}@test.com}
 
-|storyboard|Browser Test                                                                           |
-|open      |http://localhost:3000/start/complete                                                   |
-|enter     |Roger                                      |as |Sarah                                  |
-|enter     |Wilco                                      |as |Simpson                                |
-|enter     |${firstname}${timestamp}@test.com          |as |Email                                  |
-|enter     |Star Ranger                                |as |Business Name                          |
-|enter     |5412184761                                 |as |What’s your phone number?              |
-|enter     |9am PST                                    |as |When’s the best time to call?          |
-|enter     |Fly71997                                   |as |Choose your Hub Password               |
-|select    |Owner                                      |as |What's your role?                      |
-|select    |United States                              |as |Where are you located?                 |
-|select    |Coaching                                   |as |What industry are you in?              |
-|select    |50+                                        |as |How many people work there?            |
-|select    |10M+                                       |as |What were your total revenues in 2014? |
-|select    |Getting my new business on the right track |as |What kind of help are you looking for? |
-|enter     |No, I'm good                               |as |Anything else we should know?          |
-|click     |Request a Call                                                                         |
+|storyboard|Browser Test|
+|open|http://localhost:3000/start/complete|
+|enter|Roger|as|Sarah|
+|enter|Wilco|as|Simpson|
+|enter|${email}|as|Email|
+|enter|Star Ranger|as|Business Name|
+|enter|5412184761|as|What’s your phone number?|
+|enter|9am PST|as|When’s the best time to call?|
+|enter|Fly71997|as|Choose your Hub Password|
+|select|Owner|as|What's your role?|
+|select|United States|as|Where are you located?|
+|select|Coaching|as|What industry are you in?|
+|select|50+|as|How many people work there?|
+|select|10M+ |as|What were your total revenues in 2014?|
+|select|Getting my new business on the right track|as|What kind of help are you looking for?|
+|enter|No, I'm good |as|Anything else we should know?|
+|click|Request a Call|
 
 Now we want to check hubspot data to verify
 
-|script              |hub spot test                                                                         |
-|set api key         |6f8c33b5-e84e-4ffe-b371-05242ac4ea1f                                                  |
-|get contact by email|${firstname}${timestamp}@test.com                                                     |
-|check               |json path                            |$.properties.firstname.value       |Roger       |
-|check               |json path                            |$.properties.lastname.value        |Wilco       |
-|show                |response                                                                              |
+|script|hub spot test|
+|set api key|6f8c33b5-e84e-4ffe-b371-05242ac4ea1f|
+|get contact by email|${email}|
+|check|json path|$.properties.firstname.value |Roger|
+|check|json path|$.properties.lastname.value|Wilco|
+|show|response|
