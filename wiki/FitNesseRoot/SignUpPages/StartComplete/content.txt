@@ -6,7 +6,9 @@
 
 |storyboard|Browser Test|
 |note|open|http://localhost:3000/start/complete|
-|open|http://emyth:Preview15@preview.emyth.com/start/complete|
+
+|open|https://emyth:Preview15@preview.emyth.com/start/complete|
+
 |enter|Roger|as|Sarah|
 |enter|Wilco|as|Simpson|
 |enter|${email}|as|Email|
