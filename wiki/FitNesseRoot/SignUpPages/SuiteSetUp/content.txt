@@ -5,15 +5,17 @@
 |nl.hsac.fitnesse.fixture.slim.web |
 
 
-!define GRID_HUB {http://remote-selenium.local:4444/wd/hub}
+!define GRID_HUB {http://4UZvrBysCCliNAGsdhJuM6HweNv41bwW:WmhdOFwg7IpK8W3c3CwGz42DInyApUmc@EMYTH.gridlastic.com:80/wd/hub}
+!define GRID_CONSOLE {http://4UZvrBysCCliNAGsdhJuM6HweNv41bwW:WmhdOFwg7IpK8W3c3CwGz42DInyApUmc@emyth.gridlastic.com/grid/console}
+
 
 |script          |selenium driver setup                                                                                                            |
-|start driver for|chrome                                                                                                                           |
+|note|start driver for|chrome                                                                                                                           |
 |note            |start driver for     |internet explorer                                                                                          |
 |note            |start driver for     |firefox                                                                                                    |
 |note            |start driver for     |safari                                                                                                     |
 |note            |start driver for     |phantomjs                                                                                                  |
-|note            |connect to driver for|chrome           |at                    |${GRID_HUB}                                                       |
+|connect to driver for|chrome           |at                    |${GRID_HUB}                                                       |
 |note            |connect to driver for|internet explorer|at                    |${GRID_HUB}                                                       |
 |note            |connect to driver for|firefox          |at                    |${GRID_HUB}                                                       |
 |note            |connect to driver at |${GRID_HUB}      |with capabilities     |!{browserName:internet explorer, platform:Windows 8.1, version:11}|

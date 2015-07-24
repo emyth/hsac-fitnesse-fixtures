@@ -5,7 +5,8 @@
 !define email { ${firstname}${timestamp}@test.com}
 
 |storyboard|Browser Test|
-|open|http://localhost:3000/start/complete|
+|note|open|http://localhost:3000/start/complete|
+|open|http://emyth:Preview15@preview.emyth.com/start/complete|
 |enter|Roger|as|Sarah|
 |enter|Wilco|as|Simpson|
 |enter|${email}|as|Email|
